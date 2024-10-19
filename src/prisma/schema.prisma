@@ -1,0 +1,277 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Ad {
+  id            Bytes     @id @db.Binary(16)
+  type          ads_type? @default(ads)
+  user_space    String?   @db.Text
+  is_downloaded Int       @default(0) @db.TinyInt
+  ad_price      Float?    @default(0)
+  created_at    DateTime? @default(now()) @db.DateTime(0)
+  updated_at    DateTime? @updatedAt
+  courts_id     Bytes     @db.Binary(16)
+  users_id      Bytes     @db.Binary(16)
+  courts        Court    @relation(fields: [courts_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_ads_courts1")
+  users         User     @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_ads_users1")
+
+  @@index([courts_id], map: "fk_ads_courts1_idx")
+  @@index([users_id], map: "fk_ads_users1_idx")
+  @@map("ads")
+}
+
+model Court {
+  id                      Bytes                  @id @db.Binary(16)
+  mac                     String                 @db.VarChar(45)
+  title                   String                 @db.VarChar(45)
+  match_time              Int                    @default(90)
+  is_streaming_configured Int                    @default(0) @db.TinyInt
+  is_available            Int                    @default(1) @db.TinyInt
+  court_price             String?                @db.Text
+  created_at              DateTime?              @default(now()) @db.DateTime(0)
+  updated_at              DateTime?              @updatedAt
+  users_id                Bytes                  @db.Binary(16)
+  plan_id                 Bytes                  @db.Binary(16)
+  ads                     Ad[]
+  plan                    Plan                   @relation(fields: [plan_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_courts_plan1")
+  users                   User                  @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_courts_users1")
+  courts_has_streaming    CourtHasStream[]
+  devices                 Device[]
+  matches                 Match[]
+
+  @@index([plan_id], map: "fk_courts_plan1_idx")
+  @@index([users_id], map: "fk_courts_users1_idx")
+  @@map("courts")
+}
+
+
+model CourtHasStream {
+  courts_id    Bytes     @db.Binary(16)
+  streaming_id Bytes     @db.Binary(16)
+  courts       Court    @relation(fields: [courts_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_courts_has_streaming_courts1")
+  streaming    Stream @relation(fields: [streaming_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_courts_has_streaming_streaming1")
+
+  @@id([courts_id, streaming_id])
+  @@index([courts_id], map: "fk_courts_has_streaming_courts1_idx")
+  @@index([streaming_id], map: "fk_courts_has_streaming_streaming1_idx")
+  @@map("courts_has_streaming")
+}
+
+model Device {
+  id         Bytes        @id @db.Binary(16)
+  type       devices_type
+  mac        String       @db.VarChar(45)
+  ssid       String       @db.VarChar(45)
+  status     Int          @db.TinyInt
+  created_at DateTime?    @default(now()) @db.DateTime(0)
+  updated_at DateTime?    @updatedAt
+  courts_id  Bytes        @db.Binary(16)
+  courts     Court       @relation(fields: [courts_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_devices_courts1")
+
+  @@index([courts_id], map: "fk_devices_courts1_idx")
+  @@map("devices")
+}
+
+model Invoice {
+  id          Bytes            @id @db.Binary(16)
+  subtotal    Float
+  vat         Float
+  total       Float
+  status      invoices_status? @default(pending)
+  created_at  DateTime?        @default(now()) @db.DateTime(0)
+  updated_at  DateTime?        @updatedAt
+  users_id    Bytes            @db.Binary(16)
+  payments_id Bytes            @db.Binary(16)
+  payments    Payment         @relation(fields: [payments_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_invoices_payments1")
+  users       User            @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_invoices_users1")
+
+  @@index([payments_id], map: "fk_invoices_payments1_idx")
+  @@index([users_id], map: "fk_invoices_users1_idx")
+  @@map("invoices")
+}
+
+model Match {
+  id           Bytes          @id @db.Binary(16)
+  players      String         @db.VarChar(45)
+  mode         String         @db.VarChar(45)
+  camera_mode  String         @db.VarChar(45)
+  status       matches_status @default(pending)
+  playing_time String         @default("90") @db.VarChar(45)
+  video_url    String?        @db.Text
+  livescore    String?        @db.Text
+  email        String?        @db.Text
+  created_at   DateTime?      @default(now()) @db.DateTime(0)
+  updated_at   DateTime?      @updatedAt
+  courts_id    Bytes          @db.Binary(16)
+  users_id     Bytes          @db.Binary(16)
+  courts       Court         @relation(fields: [courts_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_matches_courts1")
+  users        User          @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_matches_users1")
+
+  @@index([courts_id], map: "fk_matches_courts1_idx")
+  @@index([users_id], map: "fk_matches_users1_idx")
+  @@map("matches")
+}
+
+model Payment {
+  id            Bytes           @id @db.Binary(16)
+  status        payments_status @default(pending)
+  expiration    DateTime        @db.DateTime(0)
+  card_end      String          @db.VarChar(45)
+  card_type     String          @db.VarChar(45)
+  second_chance DateTime?       @db.DateTime(0)
+  created_at    DateTime?       @default(now()) @db.DateTime(0)
+  updated_at    DateTime?       @updatedAt
+  invoices      Invoice[]
+
+  @@map("payments")
+}
+
+model Plan {
+  id         Bytes     @id @db.Binary(16)
+  type       plan_type
+  price      Float
+  created_at DateTime? @default(now()) @db.DateTime(0)
+  updated_at DateTime? @updatedAt
+  courts     Court[]
+
+  @@map("plan")
+}
+
+model Profile {
+  id         Bytes     @id @db.Binary(16)
+  name       String    @db.VarChar(255)
+  vat        String    @unique(map: "vat_UNIQUE") @db.VarChar(45)
+  email      String    @unique(map: "email_UNIQUE") @db.VarChar(255)
+  address    String    @db.VarChar(45)
+  created_at DateTime? @default(now()) @db.DateTime(0)
+  updated_at DateTime? @updatedAt
+  users_id   Bytes     @db.Binary(16)
+  users      User     @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_profile_users")
+
+  @@index([users_id], map: "fk_profile_users_idx")
+  @@map("profile")
+}
+
+model Rol {
+  id         Bytes     @id @db.Binary(16)
+  rol        roles_rol
+  created_at DateTime? @default(now()) @db.DateTime(0)
+  updated_at DateTime? @updatedAt
+  users      User[]
+
+  @@map("roles")
+}
+
+model Stream {
+  id                   Bytes                  @id @db.Binary(16)
+  service              streaming_service
+  url_service          String                 @db.Text
+  channel_id           String?                @db.VarChar(255)
+  token                String?                @db.VarChar(255)
+  refresh_token        String?                @db.VarChar(255)
+  livestream_id        String?                @db.VarChar(255)
+  created_at           DateTime?              @default(now()) @db.DateTime(0)
+  updated_at           DateTime?              @updatedAt
+  users_id             Bytes                  @db.Binary(16)
+  courts_has_streaming CourtHasStream[]
+  users                User                  @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_streaming_users1")
+
+  @@index([users_id], map: "fk_streaming_users1_idx")
+  @@map("streaming")
+}
+
+model Ticket {
+  id           Bytes                @id @db.Binary(16)
+  message      String               @db.Text
+  message_type tickets_message_type
+  ticket_ref   String               @db.VarChar(45)
+  is_closed    Int                  @default(0) @db.TinyInt
+  created_at   DateTime?            @default(now()) @db.DateTime(0)
+  updated_at   DateTime?            @updatedAt
+  users_id     Bytes                @db.Binary(16)
+  users        User                @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tickets_users1")
+
+  @@index([users_id], map: "fk_tickets_users1_idx")
+  @@map("tickets")
+}
+
+model User {
+  id         Bytes       @id @db.Binary(16)
+  login      String      @unique(map: "login_UNIQUE") @db.VarChar(45)
+  pwd        String      @db.VarChar(255)
+  email      String      @unique(map: "email_UNIQUE") @db.VarChar(255)
+  active     Int         @default(0) @db.TinyInt
+  created_at DateTime?   @default(now()) @db.DateTime(0)
+  updated_at DateTime?   @updatedAt
+  roles_id   Bytes       @db.Binary(16)
+  ads        Ad[]
+  courts     Court[]
+  invoices   Invoice[]
+  matches    Match[]
+  profile    Profile[]
+  streaming  Stream[]
+  tickets    Ticket[]
+  roles      Rol       @relation(fields: [roles_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_users_roles1")
+
+  @@index([roles_id], map: "fk_users_roles1_idx")
+  @@map("users")
+}
+
+enum ads_type {
+  ads
+  signage
+}
+
+enum devices_type {
+  box
+  sensor
+  camera
+}
+
+enum payments_status {
+  pending
+  completed
+  error
+  canceled
+}
+
+enum plan_type {
+  basic
+  premium
+}
+
+enum roles_rol {
+  admin
+  support
+  accountant
+  user
+}
+
+enum streaming_service {
+  record
+  youtube
+}
+
+enum tickets_message_type {
+  user
+  staff
+}
+
+enum invoices_status {
+  pending
+  paid
+  error
+  canceled
+}
+
+enum matches_status {
+  pending
+  waiting
+  playing
+  finished
+}

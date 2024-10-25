@@ -12,9 +12,6 @@ import CardContent from '@mui/material/CardContent'
 // Third Party Imports
 import type { ApexOptions } from 'apexcharts'
 
-// Components Imports
-import OptionsMenu from '@core/components/option-menu'
-
 // Styled Component Imports
 const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexCharts'))
 
@@ -27,11 +24,11 @@ const TotalSales = () => {
       parentHeightOffset: 0,
       toolbar: { show: false }
     },
-    tooltip: { enabled: false },
+    tooltip: { enabled: true },
     fill: {
       type: 'gradient',
       gradient: {
-        opacityTo: 0.2,
+        opacityTo: 0.6,
         opacityFrom: 1,
         shadeIntensity: 0,
         type: 'horizontal',
@@ -46,17 +43,15 @@ const TotalSales = () => {
     legend: { show: false },
     colors: [theme.palette.success.main],
     grid: {
-      show: false,
-      padding: {
-        left: 0,
-        right: 0,
-        bottom: -10
-      }
+      xaxis: { lines: { show: false } },
+      strokeDashArray: 7,
+      padding: { left: 0, top: -20, bottom: 13 },
+      borderColor: 'var(--mui-palette-divider)'
     },
     xaxis: {
       axisTicks: { show: false },
       axisBorder: { show: false },
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       labels: {
         style: {
           fontSize: '0.9375rem',
@@ -65,26 +60,27 @@ const TotalSales = () => {
       }
     },
     yaxis: {
-      labels: { show: false }
+      show: true,
+      tickAmount: 4,
+      labels: {
+        offsetY: 2,
+        offsetX: -17,
+        style: { colors: 'var(--mui-palette-text-disabled)', fontSize: theme.typography.body2.fontSize as string },
+        formatter: value => `${value > 999 ? `${(value / 1000).toFixed(2)}k` : value}€`
+      }
     }
   }
 
   return (
     <Card>
-      <CardHeader
-        title='Total Sales'
-        subheader='$21,845'
-        subheaderTypographyProps={{ sx: { color: 'var(--mui-palette-text-primary) !important' } }}
-        className='pbe-0'
-        action={<OptionsMenu iconClassName='text-textPrimary' options={['Last 28 Days', 'Last Month', 'Last Year']} />}
-      />
+      <CardHeader title='Monthly Revenue' />
       <CardContent>
         <AppReactApexCharts
           type='line'
-          height={248}
+          height={204}
           width='100%'
           options={options}
-          series={[{ name: 'Total Sales', data: [0, 258, 30, 240, 150, 400] }]}
+          series={[{ name: 'Monthly Revenue', data: [0, 2580, 300, 2400, 1500, 4000, 0, 905, 3259, 2465, 1599, 7000] }]}
         />
       </CardContent>
     </Card>

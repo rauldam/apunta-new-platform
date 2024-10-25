@@ -12,35 +12,7 @@ const verticalMenuDataAdmin = (
       // This is how you will normally render submenu
       {
         label: dictionary['navigation'].dashboards,
-        icon: 'ri-home-smile-line',
-        children: [
-          // This is how you will normally render menu item
-          {
-            label: dictionary['navigation'].crm,
-            icon: 'ri-pie-chart-2-line',
-            href: '/dashboards/crm'
-          },
-          {
-            label: dictionary['navigation'].analytics,
-            icon: 'ri-bar-chart-line',
-            href: '/dashboards/analytics'
-          },
-          {
-            label: dictionary['navigation'].eCommerce,
-            icon: 'ri-shopping-bag-3-line',
-            href: '/dashboards/ecommerce'
-          },
-          {
-            label: dictionary['navigation'].academy,
-            icon: 'ri-graduation-cap-line',
-            href: '/dashboards/academy'
-          },
-          {
-            label: dictionary['navigation'].logistics,
-            icon: 'ri-car-line',
-            href: '/dashboards/logistics'
-          }
-        ]
+        icon: 'ri-home-smile-line'
       }
     ]
   }
@@ -49,8 +21,29 @@ const verticalMenuDataAdmin = (
     return [
       // This is how you will normally render submenu
       {
-        label: dictionary['navigation'].dashboards,
-        icon: 'ri-home-smile-line'
+        label: 'Home',
+        icon: 'ri-home-smile-line',
+        href: '/home'
+      },
+      {
+        label: 'Courts',
+        icon: 'ri-basketball-line',
+        href: '/courts'
+      },
+      {
+        label: 'Streaming',
+        icon: 'ri-video-chat-line',
+        href: '/streaming'
+      },
+      {
+        label: 'Invoices',
+        icon: 'ri-receipt-line',
+        href: '/invoices'
+      },
+      {
+        label: 'Support',
+        icon: 'ri-customer-service-2-line',
+        href: '/support'
       }
     ]
   }

@@ -7,10 +7,8 @@ import dynamic from 'next/dynamic'
 
 // MUI Imports
 import Card from '@mui/material/Card'
-import Button from '@mui/material/Button'
 import { useTheme } from '@mui/material/styles'
 import CardHeader from '@mui/material/CardHeader'
-import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 
 // Third Party Imports
@@ -31,6 +29,9 @@ const WeeklyOverview = (props: any) => {
   // Vars
   const divider = 'var(--mui-palette-divider)'
   const disabled = 'var(--mui-palette-text-disabled)'
+
+  const today = new Date()
+  const dd = today.getDay()
 
   const options: ApexOptions = {
     chart: {
@@ -57,12 +58,13 @@ const WeeklyOverview = (props: any) => {
     },
     dataLabels: { enabled: false },
     colors: [
-      'var(--mui-palette-customColors-trackBg)',
-      'var(--mui-palette-customColors-trackBg)',
-      'var(--mui-palette-customColors-trackBg)',
-      'var(--mui-palette-primary-main)',
-      'var(--mui-palette-customColors-trackBg)',
-      'var(--mui-palette-customColors-trackBg)'
+      dd === 1 ? 'var(--mui-palette-success-main)' : 'var(--mui-palette-customColors-trackBg)',
+      dd === 2 ? 'var(--mui-palette-success-main)' : 'var(--mui-palette-customColors-trackBg)',
+      dd === 3 ? 'var(--mui-palette-success-main)' : 'var(--mui-palette-customColors-trackBg)',
+      dd === 4 ? 'var(--mui-palette-success-main)' : 'var(--mui-palette-customColors-trackBg)',
+      dd === 5 ? 'var(--mui-palette-success-main)' : 'var(--mui-palette-customColors-trackBg)',
+      dd === 6 ? 'var(--mui-palette-success-main)' : 'var(--mui-palette-customColors-trackBg)',
+      dd === 0 ? 'var(--mui-palette-success-main)' : 'var(--mui-palette-customColors-trackBg)'
     ],
     states: {
       hover: {
@@ -73,7 +75,7 @@ const WeeklyOverview = (props: any) => {
       }
     },
     xaxis: {
-      categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       tickPlacement: 'on',
       labels: { show: false },
       axisTicks: { show: false },
@@ -86,7 +88,7 @@ const WeeklyOverview = (props: any) => {
         offsetY: 2,
         offsetX: -17,
         style: { colors: disabled, fontSize: theme.typography.body2.fontSize as string },
-        formatter: value => `${value > 999 ? `${(value / 1000).toFixed(0)}` : value}k`
+        formatter: value => `${value > 999 ? `${(value / 1000).toFixed(0)}` : value}`
       }
     }
   }
@@ -96,15 +98,15 @@ const WeeklyOverview = (props: any) => {
       <CardHeader title={title} />
       <CardContent sx={{ '& .apexcharts-xcrosshairs.apexcharts-active': { opacity: 0 } }}>
         <Suspense fallback={<Loading />}>
-          <AppReactApexCharts type='bar' height={106} width='100%' series={data} options={options} />
+          <AppReactApexCharts type='bar' height={204} width='100%' series={data} options={options} />
         </Suspense>
-        <div className='flex items-center mbe-4 gap-4'>
+        {/*<div className='flex items-center mbe-4 gap-4'>
           <Typography variant='h4'>45%</Typography>
           <Typography>Your sales performance is 45% 😎 better compared to last month</Typography>
         </div>
         <Button fullWidth variant='contained'>
           Details
-        </Button>
+        </Button>*/}
       </CardContent>
     </Card>
   )

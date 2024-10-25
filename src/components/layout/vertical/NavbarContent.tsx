@@ -17,7 +17,7 @@ import UserDropdown from '@components/layout/shared/UserDropdown'
 import { verticalLayoutClasses } from '@layouts/utils/layoutClasses'
 
 // Vars
-const shortcuts: ShortcutsType[] = [
+/* const shortcuts: ShortcutsType[] = [
   {
     url: '/apps/calendar',
     icon: 'ri-calendar-line',
@@ -101,7 +101,7 @@ const notifications: NotificationsType[] = [
     time: 'Jan 6, 1:48 PM',
     read: true
   }
-]
+] */
 
 const NavbarContent = () => {
   return (
@@ -113,8 +113,9 @@ const NavbarContent = () => {
       <div className='flex items-center'>
         <LanguageDropdown />
         <ModeDropdown />
-        <ShortcutsDropdown shortcuts={shortcuts} />
+        {/* <ShortcutsDropdown shortcuts={shortcuts} />
         <NotificationsDropdown notifications={notifications} />
+        */}
         <UserDropdown />
       </div>
     </div>

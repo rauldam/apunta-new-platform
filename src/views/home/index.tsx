@@ -17,13 +17,19 @@ import OptionsMenu from '@core/components/option-menu'
 
 const CourtCard = ({ court }: { court: Court }) => {
   const menuOptions = [
-    'General Settings',
-    'Advertisements',
-    'Streaming',
+    { text: 'General Settings', href: 'courts/settings' },
+    court.plan.type === 'basic'
+      ? { text: 'Advertisement', href: 'courts/ads' }
+      : { text: 'Digital Signage', href: 'courts/signage' },
+    court.plan.type === 'basic'
+      ? { text: 'Streaming', href: 'courts/streaming' }
+      : { text: 'Streaming & Record', href: 'courts/streaming' },
     { divider: true },
-    'Camera Installation',
-    'Qr Code Generator',
-    'Virtual Display'
+    { text: 'Camera installation' },
+    { text: 'Qr Generator Code', href: 'courts/qr' },
+    court.plan.type === 'premium'
+      ? { text: 'Virtual Display', href: `https://www.apunta.es/vd?mac=${court.mac}`, linkProps: { target: '_blank' } }
+      : ''
   ]
 
   return (

@@ -1,4 +1,6 @@
 //MUI Imports
+import { Suspense } from 'react'
+
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
@@ -9,8 +11,8 @@ import Grid from '@mui/material/Grid'
 import type { ThemeColor } from '@core/types'
 
 // Components Imports
-import OptionMenu from '@core/components/option-menu'
 import CustomAvatar from '@core/components/mui/Avatar'
+import { Loading } from '@/components/Loading'
 
 type DataType = {
   icon: string
@@ -22,25 +24,25 @@ type DataType = {
 // Vars
 const data: DataType[] = [
   {
-    stats: '245k',
-    title: 'Sales',
+    stats: '359',
+    title: 'Rentals',
     color: 'primary',
     icon: 'ri-pie-chart-2-line'
   },
   {
-    stats: '12.5k',
-    title: 'Users',
+    stats: '683',
+    title: 'Emails',
     color: 'success',
-    icon: 'ri-group-line'
+    icon: 'ri-mail-check-line'
   },
   {
-    stats: '1.54k',
+    stats: '2',
     color: 'warning',
-    title: 'Products',
+    title: 'Courts',
     icon: 'ri-macbook-line'
   },
   {
-    stats: '$88k',
+    stats: '34k',
     color: 'info',
     title: 'Revenue',
     icon: 'ri-money-dollar-circle-line'
@@ -49,33 +51,26 @@ const data: DataType[] = [
 
 const Transactions = () => {
   return (
-    <Card className='bs-full'>
-      <CardHeader
-        title='Transactions'
-        action={<OptionMenu iconClassName='text-textPrimary' options={['Refresh', 'Share', 'Update']} />}
-        subheader={
-          <p className='mbs-3'>
-            <span className='font-medium text-textPrimary'>Total 48.5% Growth 😎</span>
-            <span className='text-textSecondary'>this month</span>
-          </p>
-        }
-      />
-      <CardContent className='!pbs-5'>
-        <Grid container spacing={2}>
-          {data.map((item, index) => (
-            <Grid item xs={6} md={3} key={index}>
-              <div className='flex items-center gap-3'>
-                <CustomAvatar variant='rounded' color={item.color} className='shadow-xs'>
-                  <i className={item.icon}></i>
-                </CustomAvatar>
+    <Card>
+      <CardHeader title='Transactions' />
+      <CardContent className='!pbs-4'>
+        <Suspense fallback={<Loading />}>
+          <Grid container spacing={2}>
+            {data.map((item, index) => (
+              <Grid item xs={6} md={6} key={index}>
+                <div className='flex items-center gap-3'>
+                  <CustomAvatar variant='rounded' color={item.color} className='shadow-xs'>
+                    <i className={item.icon}></i>
+                  </CustomAvatar>
+                </div>
                 <div>
                   <Typography>{item.title}</Typography>
                   <Typography variant='h5'>{item.stats}</Typography>
                 </div>
-              </div>
-            </Grid>
-          ))}
-        </Grid>
+              </Grid>
+            ))}
+          </Grid>
+        </Suspense>
       </CardContent>
     </Card>
   )

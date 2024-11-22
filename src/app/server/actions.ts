@@ -21,7 +21,7 @@ import { db as faqData } from '@/fake-db/pages/faq'
 import { db as pricingData } from '@/fake-db/pages/pricing'
 import { db as statisticsData } from '@/fake-db/pages/widgetExamples'
 
-import { StringtoBuffer } from '@/utils/uuidToBuffer'
+import { StringToBuffer } from '@/utils/uuidToBuffer'
 
 const prisma = new PrismaClient()
 
@@ -67,11 +67,11 @@ export const getStatisticsData = async () => {
 
 export const getCourts = async (session: Session) => {
   // Simulate a delay for fetching court number
-  console.log('BYNARI UUID: ' + StringtoBuffer(session?.user.id) + ' String uuid: ' + session?.user.id)
+  console.log('BINARY UUID: ' + StringToBuffer(session?.user.id) + ' String uuid: ' + session?.user.id)
 
   const courts = await prisma.court.findMany({
     where: {
-      users_id: StringtoBuffer(session?.user.id)
+      users_id: StringToBuffer(session?.user.id)
     },
     include: {
       plan: {}

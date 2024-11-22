@@ -1,4 +1,4 @@
-export function StringtoBuffer(uuid: string): Buffer {
+export function StringToBuffer(uuid: string): Buffer {
   if (!uuid) {
     return Buffer.alloc(16) // Return empty buffer
   }
@@ -10,7 +10,7 @@ export function StringtoBuffer(uuid: string): Buffer {
   return Buffer.from(hexStr, 'hex')
 }
 
-export function BuffertoString(buffer: Buffer): string {
+export function BufferToString(buffer: Buffer): string {
   if (buffer.length != 16) throw new Error(`Invalid buffer length for uuid: ${buffer.length}`)
   const str = buffer.toString('hex')
 

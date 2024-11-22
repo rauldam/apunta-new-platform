@@ -6,7 +6,7 @@ import { PrismaClient } from '@prisma/client'
 
 import bcrypt from 'bcryptjs'
 
-import { BuffertoString } from '@/utils/uuidToBuffer'
+import { BufferToString } from '@/utils/uuidToBuffer'
 
 const prisma = new PrismaClient()
 
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
 
     if (match) {
       const response = {
-        id: BuffertoString(user[0].id),
+        id: BufferToString(user[0].id),
         role: user[0].roles.rol,
         name: user[0].profile[0].name,
         email: user[0].profile[0].email,

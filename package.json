@@ -1,6 +1,6 @@
 {
-  "name": "materio-mui-nextjs-admin-template",
-  "version": "4.1.0",
+  "name": "apunta-digital-scoreboard-web",
+  "version": "5.0.0",
   "license": "Commercial",
   "private": true,
   "scripts": {
@@ -114,6 +114,7 @@
     "stylis-plugin-rtl": "2.1.1",
     "tailwindcss": "3.4.6",
     "tailwindcss-logical": "3.0.1",
+    "ts-node": "^10.9.2",
     "tsx": "4.16.2",
     "typescript": "5.5.4"
   },
@@ -125,6 +126,7 @@
     "rimraf": "^5.0.7"
   },
   "prisma": {
-    "schema": "./src/prisma/schema.prisma"
+    "schema": "./src/prisma/schema.prisma",
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} ./src/prisma/seed.ts"
   }
 }

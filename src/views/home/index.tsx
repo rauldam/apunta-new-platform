@@ -9,7 +9,7 @@ import { Divider } from '@mui/material'
 
 import type { Court } from '@prisma/client'
 
-import { BuffertoString } from '@/utils/uuidToBuffer'
+import { BufferToString } from '@/utils/uuidToBuffer'
 
 // Components Imports
 
@@ -33,11 +33,11 @@ const CourtCard = ({ court }: { court: Court }) => {
   ]
 
   return (
-    <Card key={BuffertoString(court.id)}>
+    <Card key={BufferToString(court.id)}>
       <CardHeader title={court.title} action={<OptionsMenu iconClassName='text-textPrimary' options={menuOptions} />} />
       <Divider></Divider>
       <Link href={`/courts/create/${court.mac}`}>
-        <CardContent key={BuffertoString(court.id)}>
+        <CardContent key={BufferToString(court.id)}>
           <Image alt={'court'} width={200} height={100} src={'/images/pista2.png'} />
           <p>{court.plan.type}</p>
         </CardContent>

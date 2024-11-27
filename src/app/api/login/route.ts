@@ -39,17 +39,9 @@ export async function POST(req: Request) {
     }
   })
 
-  //console.log(user)
-
-  if (user && user[0].pwd) {
-    console.log(user)
-
-    // Hash the password before comparing it to the stored hash
-    const hashedPassword = await bcrypt.hash(password, 10)
-
+  if (user && user.length > 0) {
     // If the password matches, return the user data
-
-    const match = await bcrypt.compare(password, hashedPassword)
+    const match = await bcrypt.compare(password, user[0].pwd)
 
     if (match) {
       const response = {
@@ -60,13 +52,12 @@ export async function POST(req: Request) {
         image: '/images/avatars/1.png'
       }
 
-      console.log(user[0].profile)
-
       return NextResponse.json(response)
     } else {
       return NextResponse.json(
         {
           // We create object here to separate each error message for each field in case of multiple errors
+
           message: ['Password is invalid']
         },
         {
@@ -80,7 +71,8 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         // We create object here to separate each error message for each field in case of multiple errors
-        message: ['Email or Password is invalid']
+
+        message: ['Email is invalid']
       },
       {
         status: 401,

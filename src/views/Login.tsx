@@ -118,6 +118,8 @@ const Login = ({ mode }: { mode: Mode }) => {
       if (res?.error) {
         const error = JSON.parse(res.error)
 
+        console.log('ERROR LOGIN:', error)
+
         setErrorState(error)
       }
     }

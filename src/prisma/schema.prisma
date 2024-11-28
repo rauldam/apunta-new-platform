@@ -17,8 +17,8 @@ model Ad {
   updated_at    DateTime? @updatedAt
   courts_id     Bytes     @db.Binary(16)
   users_id      Bytes     @db.Binary(16)
-  courts        Court    @relation(fields: [courts_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_ads_courts1")
-  users         User     @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_ads_users1")
+  courts        Court     @relation(fields: [courts_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_ads_courts1")
+  users         User      @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_ads_users1")
 
   @@index([courts_id], map: "fk_ads_courts1_idx")
   @@index([users_id], map: "fk_ads_users1_idx")
@@ -26,20 +26,21 @@ model Ad {
 }
 
 model Court {
-  id                      Bytes                  @id @db.Binary(16)
-  mac                     String                 @db.VarChar(45)
-  title                   String                 @db.VarChar(45)
-  match_time              Int                    @default(90)
-  is_streaming_configured Int                    @default(0) @db.TinyInt
-  is_available            Int                    @default(1) @db.TinyInt
-  court_price             String?                @db.Text
-  created_at              DateTime?              @default(now()) @db.DateTime(0)
-  updated_at              DateTime?              @updatedAt
-  users_id                Bytes                  @db.Binary(16)
-  plan_id                 Bytes                  @db.Binary(16)
+  id                      Bytes            @id @db.Binary(16)
+  mac                     String           @db.VarChar(45)
+  title                   String           @db.VarChar(45)
+  match_time              Int              @default(90)
+  is_streaming_configured Int              @default(0) @db.TinyInt
+  is_available            Int              @default(1) @db.TinyInt
+  court_price             String?          @db.Text
+  created_at              DateTime?        @default(now()) @db.DateTime(0)
+  updated_at              DateTime?        @updatedAt
+  users_id                Bytes            @db.Binary(16)
+  plan_id                 Bytes            @db.Binary(16)
+  distributor_id          Bytes?           @db.Binary(16)
   ads                     Ad[]
-  plan                    Plan                   @relation(fields: [plan_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_courts_plan1")
-  users                   User                  @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_courts_users1")
+  plan                    Plan             @relation(fields: [plan_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_courts_plan1")
+  users                   User             @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_courts_users1")
   courts_has_streaming    CourtHasStream[]
   devices                 Device[]
   matches                 Match[]
@@ -49,11 +50,10 @@ model Court {
   @@map("courts")
 }
 
-
 model CourtHasStream {
-  courts_id    Bytes     @db.Binary(16)
-  streaming_id Bytes     @db.Binary(16)
-  courts       Court    @relation(fields: [courts_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_courts_has_streaming_courts1")
+  courts_id    Bytes  @db.Binary(16)
+  streaming_id Bytes  @db.Binary(16)
+  courts       Court  @relation(fields: [courts_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_courts_has_streaming_courts1")
   streaming    Stream @relation(fields: [streaming_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_courts_has_streaming_streaming1")
 
   @@id([courts_id, streaming_id])
@@ -71,7 +71,7 @@ model Device {
   created_at DateTime?    @default(now()) @db.DateTime(0)
   updated_at DateTime?    @updatedAt
   courts_id  Bytes        @db.Binary(16)
-  courts     Court       @relation(fields: [courts_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_devices_courts1")
+  courts     Court        @relation(fields: [courts_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_devices_courts1")
 
   @@index([courts_id], map: "fk_devices_courts1_idx")
   @@map("devices")
@@ -87,8 +87,8 @@ model Invoice {
   updated_at  DateTime?        @updatedAt
   users_id    Bytes            @db.Binary(16)
   payments_id Bytes            @db.Binary(16)
-  payments    Payment         @relation(fields: [payments_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_invoices_payments1")
-  users       User            @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_invoices_users1")
+  payments    Payment          @relation(fields: [payments_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_invoices_payments1")
+  users       User             @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_invoices_users1")
 
   @@index([payments_id], map: "fk_invoices_payments1_idx")
   @@index([users_id], map: "fk_invoices_users1_idx")
@@ -109,8 +109,8 @@ model Match {
   updated_at   DateTime?      @updatedAt
   courts_id    Bytes          @db.Binary(16)
   users_id     Bytes          @db.Binary(16)
-  courts       Court         @relation(fields: [courts_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_matches_courts1")
-  users        User          @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_matches_users1")
+  courts       Court          @relation(fields: [courts_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_matches_courts1")
+  users        User           @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_matches_users1")
 
   @@index([courts_id], map: "fk_matches_courts1_idx")
   @@index([users_id], map: "fk_matches_users1_idx")
@@ -151,7 +151,7 @@ model Profile {
   created_at DateTime? @default(now()) @db.DateTime(0)
   updated_at DateTime? @updatedAt
   users_id   Bytes     @db.Binary(16)
-  users      User     @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_profile_users")
+  users      User      @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_profile_users")
 
   @@index([users_id], map: "fk_profile_users_idx")
   @@map("profile")
@@ -168,18 +168,18 @@ model Rol {
 }
 
 model Stream {
-  id                   Bytes                  @id @db.Binary(16)
+  id                   Bytes             @id @db.Binary(16)
   service              streaming_service
-  url_service          String                 @db.Text
-  channel_id           String?                @db.VarChar(255)
-  token                String?                @db.VarChar(255)
-  refresh_token        String?                @db.VarChar(255)
-  livestream_id        String?                @db.VarChar(255)
-  created_at           DateTime?              @default(now()) @db.DateTime(0)
-  updated_at           DateTime?              @updatedAt
-  users_id             Bytes                  @db.Binary(16)
+  url_service          String            @db.Text
+  channel_id           String?           @db.VarChar(255)
+  token                String?           @db.VarChar(255)
+  refresh_token        String?           @db.VarChar(255)
+  livestream_id        String?           @db.VarChar(255)
+  created_at           DateTime?         @default(now()) @db.DateTime(0)
+  updated_at           DateTime?         @updatedAt
+  users_id             Bytes             @db.Binary(16)
   courts_has_streaming CourtHasStream[]
-  users                User                  @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_streaming_users1")
+  users                User              @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_streaming_users1")
 
   @@index([users_id], map: "fk_streaming_users1_idx")
   @@map("streaming")
@@ -194,32 +194,47 @@ model Ticket {
   created_at   DateTime?            @default(now()) @db.DateTime(0)
   updated_at   DateTime?            @updatedAt
   users_id     Bytes                @db.Binary(16)
-  users        User                @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tickets_users1")
+  users        User                 @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tickets_users1")
 
   @@index([users_id], map: "fk_tickets_users1_idx")
   @@map("tickets")
 }
 
 model User {
-  id         Bytes       @id @db.Binary(16)
-  login      String      @unique(map: "login_UNIQUE") @db.VarChar(45)
-  pwd        String      @db.VarChar(255)
-  email      String      @unique(map: "email_UNIQUE") @db.VarChar(255)
-  active     Int         @default(0) @db.TinyInt
-  created_at DateTime?   @default(now()) @db.DateTime(0)
-  updated_at DateTime?   @updatedAt
-  roles_id   Bytes       @db.Binary(16)
-  ads        Ad[]
-  courts     Court[]
-  invoices   Invoice[]
-  matches    Match[]
-  profile    Profile[]
-  streaming  Stream[]
-  tickets    Ticket[]
-  roles      Rol       @relation(fields: [roles_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_users_roles1")
+  id          Bytes         @id @db.Binary(16)
+  login       String        @unique(map: "login_UNIQUE") @db.VarChar(45)
+  pwd         String        @db.VarChar(255)
+  email       String        @unique(map: "email_UNIQUE") @db.VarChar(255)
+  active      Int           @default(0) @db.TinyInt
+  created_at  DateTime?     @default(now()) @db.DateTime(0)
+  updated_at  DateTime?     @updatedAt
+  roles_id    Bytes         @db.Binary(16)
+  ads         Ad[]
+  courts      Court[]
+  invoices    Invoice[]
+  matches     Match[]
+  profile     Profile[]
+  streaming   Stream[]
+  tickets     Ticket[]
+  roles       Rol           @relation(fields: [roles_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_users_roles1")
+  Distributor Distributor[]
 
   @@index([roles_id], map: "fk_users_roles1_idx")
   @@map("users")
+}
+
+model Distributor {
+  id           Bytes     @id @db.Binary(16)
+  discount     Float?
+  commission   Float     @default(25.00) @db.Float
+  device_price Int?      @default(0) @db.Int
+  created_at   DateTime? @default(now()) @db.DateTime(0)
+  updated_at   DateTime? @updatedAt
+  users_id     Bytes     @db.Binary(16)
+  users        User      @relation(fields: [users_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_distributor_users1")
+
+  @@index([users_id], map: "fk_distributor_users1_idx")
+  @@map("distributors")
 }
 
 enum ads_type {
@@ -250,6 +265,7 @@ enum roles_rol {
   support
   accountant
   user
+  distributor
 }
 
 enum streaming_service {

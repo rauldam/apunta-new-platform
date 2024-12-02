@@ -4,7 +4,7 @@ import { Grid } from '@mui/material'
 
 import { getServerSession } from 'next-auth/next'
 
-import type { Court } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 
 import { authOptions } from '@/libs/auth'
 
@@ -19,11 +19,12 @@ const Home = async () => {
   //const token = session.user?.token
   const session = await getServerSession(authOptions)
   const rol = session && session?.user.role
-  let data: Court[] = []
 
-  if (session) {
+  type CourtWithPlan = Prisma.PromiseReturnType<typeof getCourts>
+  let data: CourtWithPlan = []
+
+  if (session && session.user.role == 'user') {
     data = await getCourts(session)
-
     console.log(data)
   }
 

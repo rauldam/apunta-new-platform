@@ -30,8 +30,7 @@ import { i18n } from '@configs/i18n'
 import { getDictionary } from '@/utils/getDictionary'
 import { getMode, getSystemMode } from '@core/utils/serverHelpers'
 import { authOptions } from '@/libs/auth'
-import { Suspense } from 'react'
-import { Loading } from '@/components/Loading'
+
 
 const Layout = async ({ children, params }: ChildrenType & { params: { lang: Locale } }) => {
   // Vars

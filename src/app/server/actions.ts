@@ -73,9 +73,7 @@ export const getCourts = async (session: Session) => {
     where: {
       users_id: StringToBuffer(session?.user.id)
     },
-    include: {
-      plan: {}
-    }
+    include: { plan: true }
   })
 
   return courts

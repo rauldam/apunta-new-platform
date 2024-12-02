@@ -8,31 +8,31 @@ import Link from 'next/link'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 // MUI Imports
-import Typography from '@mui/material/Typography'
-import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
+import Divider from '@mui/material/Divider'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
-import Checkbox from '@mui/material/Checkbox'
-import Button from '@mui/material/Button'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Divider from '@mui/material/Divider'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 
 // Third-party Imports
-import { signIn } from 'next-auth/react'
-import { Controller, useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { object, minLength, string, email, pipe, nonEmpty } from 'valibot'
 import classnames from 'classnames'
+import { signIn } from 'next-auth/react'
 import type { SubmitHandler } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import type { InferInput } from 'valibot'
+import { email, minLength, nonEmpty, object, pipe, string } from 'valibot'
 
 // Type Imports
-import type { Mode } from '@core/types'
 import type { Locale } from '@configs/i18n'
+import type { Mode } from '@core/types'
 
 // Component Imports
-import Logo from '@components/layout/shared/Logo'
 import Illustrations from '@components/Illustrations'
+import Logo from '@components/layout/shared/Logo'
 
 // Config Imports
 import themeConfig from '@configs/themeConfig'
@@ -58,6 +58,7 @@ const schema = object({
     minLength(5, 'Password must be at least 5 characters long')
   )
 })
+const GOOGLE = '';
 
 const Login = ({ mode }: { mode: Mode }) => {
   // States
@@ -71,6 +72,7 @@ const Login = ({ mode }: { mode: Mode }) => {
   const lightIllustration = '/images/illustrations/auth/v2-login-light.png'
   const borderedDarkIllustration = '/images/illustrations/auth/v2-login-dark-border.png'
   const borderedLightIllustration = '/images/illustrations/auth/v2-login-light-border.png'
+
 
   // Hooks
   const router = useRouter()
@@ -237,16 +239,20 @@ const Login = ({ mode }: { mode: Mode }) => {
               </Typography>
             </div>
           </form>
-          <Divider className='gap-3'>or</Divider>
-          <Button
-            color='secondary'
-            className='self-center text-textPrimary'
-            startIcon={<img src='/images/logos/google.png' alt='Google' width={22} />}
-            sx={{ '& .MuiButton-startIcon': { marginInlineEnd: 3 } }}
-            onClick={() => signIn('google')}
-          >
-            Sign in with Google
-          </Button>
+          {GOOGLE && GOOGLE?.length > 0 && (
+            <div>
+            <Divider className='gap-3'>or</Divider>
+            <Button
+              color='secondary'
+              className='self-center text-textPrimary'
+              startIcon={<img src='/images/logos/google.png' alt='Google' width={22} />}
+              sx={{ '& .MuiButton-startIcon': { marginInlineEnd: 3 } }}
+              onClick={() => signIn('google')}
+            >
+              Sign in with Google
+            </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

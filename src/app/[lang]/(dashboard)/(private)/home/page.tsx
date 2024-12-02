@@ -8,12 +8,12 @@ import type { Court } from '@prisma/client'
 
 import { authOptions } from '@/libs/auth'
 
-import CourtCard from '@/views/home'
 import { getCourts } from '@/app/server/actions'
-import TotalSales from '@/views/dashboards/crm/TotalSales'
-import WeeklyOverview from '@/views/dashboards/analytics/WeeklyOverview'
-import Transactions from '@/views/dashboards/analytics/Transactions'
 import { Loading } from '@/components/Loading'
+import Transactions from '@/views/dashboards/analytics/Transactions'
+import WeeklyOverview from '@/views/dashboards/analytics/WeeklyOverview'
+import TotalSales from '@/views/dashboards/crm/TotalSales'
+import CourtCard from '@/views/home'
 
 const Home = async () => {
   //const token = session.user?.token

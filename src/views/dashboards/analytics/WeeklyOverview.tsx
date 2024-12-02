@@ -1,23 +1,23 @@
 'use client'
 
 // Next Imports
-import { Suspense } from 'react'
 
 import dynamic from 'next/dynamic'
 
 // MUI Imports
 import Card from '@mui/material/Card'
-import { useTheme } from '@mui/material/styles'
-import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
+import CardHeader from '@mui/material/CardHeader'
+import { useTheme } from '@mui/material/styles'
 
 // Third Party Imports
 import type { ApexOptions } from 'apexcharts'
-
+import { Suspense } from 'react'
 import { Loading } from '@/components/Loading'
 
+
 // Styled Component Imports
-const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexCharts'))
+const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexCharts'),{ ssr: false })
 
 const WeeklyOverview = (props: any) => {
   // Props
@@ -97,10 +97,10 @@ const WeeklyOverview = (props: any) => {
     <Card>
       <CardHeader title={title} />
       <CardContent sx={{ '& .apexcharts-xcrosshairs.apexcharts-active': { opacity: 0 } }}>
-        <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading />}>
           <AppReactApexCharts type='bar' height={204} width='100%' series={data} options={options} />
         </Suspense>
-        {/*<div className='flex items-center mbe-4 gap-4'>
+          {/*<div className='flex items-center mbe-4 gap-4'>
           <Typography variant='h4'>45%</Typography>
           <Typography>Your sales performance is 45% 😎 better compared to last month</Typography>
         </div>

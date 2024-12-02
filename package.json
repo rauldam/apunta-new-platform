@@ -1,7 +1,7 @@
 {
   "name": "apunta-digital-scoreboard-web",
   "version": "5.0.0",
-  "license": "Commercial",
+  "license": "Copyright 2025 Goodidea Ingenieria - Apunta",
   "private": true,
   "scripts": {
     "dev": "next dev",

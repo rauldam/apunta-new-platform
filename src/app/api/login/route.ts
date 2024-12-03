@@ -19,10 +19,10 @@ export async function POST(req: Request) {
 
   //const user = users.find(u => u.email === email && u.password === password)
   //let response: null | ResponseUser = null
-
   const user = await prisma.user.findMany({
     where: {
-      email: email
+      email: email,
+      active: 1
     },
     include: {
       roles: {

@@ -126,15 +126,14 @@ const DebouncedInput = ({
 // Vars
 const userRoleObj: UserRoleType = {
   admin: { icon: 'ri-vip-crown-line', color: 'error' },
-  author: { icon: 'ri-computer-line', color: 'warning' },
-  editor: { icon: 'ri-edit-box-line', color: 'info' },
-  maintainer: { icon: 'ri-pie-chart-2-line', color: 'success' },
-  subscriber: { icon: 'ri-user-3-line', color: 'primary' }
+  user: { icon: 'ri-computer-line', color: 'warning' },
+  accountant: { icon: 'ri-edit-box-line', color: 'info' },
+  distributor: { icon: 'ri-pie-chart-2-line', color: 'success' },
+  support: { icon: 'ri-user-3-line', color: 'primary' }
 }
 
 const userStatusObj: UserStatusType = {
   active: 'success',
-  pending: 'warning',
   inactive: 'secondary'
 }
 
@@ -238,7 +237,7 @@ const UserListTable = ({ tableData }: { tableData?: UsersType[] }) => {
               <i className='ri-delete-bin-7-line text-textSecondary' />
             </IconButton>
             <IconButton>
-              <Link href={getLocalizedUrl('/apps/user/view', locale as Locale)} className='flex'>
+              <Link href={getLocalizedUrl('/users/' + row.original.id, locale as Locale)} className='flex'>
                 <i className='ri-eye-line text-textSecondary' />
               </Link>
             </IconButton>
@@ -313,25 +312,17 @@ const UserListTable = ({ tableData }: { tableData?: UsersType[] }) => {
   return (
     <>
       <Card>
-        <CardHeader title='Filters' />
+        <CardHeader title='Users' />
         <TableFilters setData={setFilteredData} tableData={data} />
         <Divider />
         <div className='flex justify-between p-5 gap-4 flex-col items-start sm:flex-row sm:items-center'>
-          <Button
-            color='secondary'
-            variant='outlined'
-            startIcon={<i className='ri-upload-2-line text-xl' />}
+          <DebouncedInput
+            value={globalFilter ?? ''}
+            onChange={value => setGlobalFilter(String(value))}
+            placeholder='Search User'
             className='max-sm:is-full'
-          >
-            Export
-          </Button>
+          />
           <div className='flex items-center gap-x-4 gap-4 flex-col max-sm:is-full sm:flex-row'>
-            <DebouncedInput
-              value={globalFilter ?? ''}
-              onChange={value => setGlobalFilter(String(value))}
-              placeholder='Search User'
-              className='max-sm:is-full'
-            />
             <Button variant='contained' onClick={() => setAddUserOpen(!addUserOpen)} className='max-sm:is-full'>
               Add New User
             </Button>

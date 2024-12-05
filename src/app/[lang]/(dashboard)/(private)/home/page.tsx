@@ -73,10 +73,11 @@ const Home = async () => {
           <Grid item xs={12} sm={12} md={21} className='mb-6'>
             <h3>Our Courts</h3>
           </Grid>
+
           <Suspense fallback={<Loading />}>
             {data?.map((court, index) => {
               return (
-                <Grid key={index} item xs={12} sm={6} md={3} className='self-end'>
+                <Grid key={index} item xs={12} sm={6} md={3} className='self-start'>
                   <CourtCard court={court} />
                 </Grid>
               )

@@ -3,16 +3,38 @@
 import type { VerticalMenuDataType } from '@/types/menuTypes'
 import type { getDictionary } from '@/utils/getDictionary'
 
-const verticalMenuDataAdmin = (
+const verticalMenuDataAdmin =  (
   dictionary: Awaited<ReturnType<typeof getDictionary>>,
   rol: string
 ): VerticalMenuDataType[] => {
   if (rol === 'admin') {
-    return [
+   return [
       // This is how you will normally render submenu
       {
         label: dictionary['navigation'].dashboards,
-        icon: 'ri-home-smile-line'
+        icon: 'ri-home-smile-line',
+        href: '/home'
+      },
+      {
+        label: 'Users',
+        icon: 'ri-team-line',
+        href: '/users'
+      }
+    ]
+  }
+
+  if (rol === 'distributor') {
+    return [
+      // This is how you will normally render submenu
+      {
+        label: 'Home',
+        icon: 'ri-home-smile-line',
+        href: '/home'
+      },
+      {
+        label: 'Users',
+        icon: 'ri-team-line',
+        href: '/users'
       }
     ]
   }

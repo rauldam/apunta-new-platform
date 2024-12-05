@@ -2,7 +2,7 @@
 import type { ThemeColor } from '@core/types'
 
 export type UsersType = {
-  id: number
+  id: number | string
   role: string
   email: string
   status: string
@@ -12,6 +12,8 @@ export type UsersType = {
   contact: string
   fullName: string
   username: string
-  currentPlan: string
+  currentPlan?: string
   avatarColor?: ThemeColor
+  vat?: string
+  login?: string
 }

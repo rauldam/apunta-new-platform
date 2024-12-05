@@ -70,6 +70,14 @@ export const getCourts = async (session: Session) => {
   console.log('BINARY UUID: ' + StringToBuffer(session?.user.id) + ' String uuid: ' + session?.user.id)
 
   const courts = await prisma.court.findMany({
+    orderBy: [
+      {
+        is_available: 'desc'
+      },
+      {
+        created_at: 'asc'
+      }
+    ],
     where: {
       users_id: StringToBuffer(session?.user.id)
     },
@@ -77,4 +85,94 @@ export const getCourts = async (session: Session) => {
   })
 
   return courts
+}
+
+export const getUsers = async () => {
+  const users = await prisma.user.findMany({
+    where: {
+      roles: { rol: 'user' }
+    },
+    select: {
+      id: true,
+      email: true,
+      active: true,
+      login: true,
+      profile: {
+        select: {
+          name: true,
+          email: true,
+          vat: true,
+          address: true,
+          created_at: true
+        }
+      }
+    }
+  })
+
+  return users
+}
+
+export const getUsersByDistributor = async (id: string) => {
+  const users = await prisma.user.findMany({
+    where: {
+      courts: {
+        some: { distributor_id: StringToBuffer(id) }
+      },
+      roles: { rol: 'user' }
+    },
+    select: {
+      id: true,
+      email: true,
+      active: true,
+      login: true,
+      profile: {
+        select: {
+          name: true,
+          email: true,
+          vat: true,
+          address: true,
+          created_at: true
+        }
+      }
+    }
+  })
+
+  return users
+}
+
+export const getUserById = async (id: string) => {
+  const user = await prisma.user.findMany({
+    where: {
+      id: StringToBuffer(id)
+    },
+    select: {
+      email: true,
+      login: true,
+      profile: {
+        select: {
+          name: true,
+          email: true,
+          vat: true,
+          address: true,
+          created_at: true
+        }
+      }
+    }
+  })
+
+  return user
+}
+
+export const resetCourt = async (id: string) => {
+  const court = await prisma.court.update({
+    where: {
+      id: StringToBuffer(id)
+    },
+    data: {
+      is_available: 1
+    }
+  })
+
+  if (court === null) return false
+  if (court.is_available === 1) return true
 }

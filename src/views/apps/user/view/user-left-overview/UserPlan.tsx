@@ -11,7 +11,7 @@ import type { ButtonProps } from '@mui/material/Button'
 import UpgradePlan from '@components/dialogs/upgrade-plan'
 import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementClick'
 
-const UserPlan = () => {
+const UserPlan = ({id}: {id:string}) => {
   // Vars
   const buttonProps: ButtonProps = {
     variant: 'contained',

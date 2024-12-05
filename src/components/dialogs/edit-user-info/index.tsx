@@ -61,6 +61,8 @@ const languages = ['English', 'Spanish', 'French', 'German', 'Hindi']
 const countries = ['Select Country', 'France', 'Russia', 'China', 'UK', 'US']
 
 const EditUserInfo = ({ open, setOpen, data }: EditUserInfoProps) => {
+
+
   // States
   const [userData, setUserData] = useState<EditUserInfoProps['data']>(data || initialData)
 

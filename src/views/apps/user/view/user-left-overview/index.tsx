@@ -3,16 +3,13 @@ import Grid from '@mui/material/Grid'
 
 // Component Imports
 import UserDetails from './UserDetails'
-import UserPlan from './UserPlan'
 
-const UserLeftOverview = () => {
+const UserLeftOverview = async ({ id }: { id: string }) => {
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <UserDetails />
-      </Grid>
-      <Grid item xs={12}>
-        <UserPlan />
+        <UserDetails id={id} />
       </Grid>
     </Grid>
   )

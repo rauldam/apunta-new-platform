@@ -2,7 +2,10 @@
 
 // React Imports
 import { useRef, useState } from 'react'
+
 import type { ReactElement, ReactNode, SyntheticEvent } from 'react'
+
+import { useRouter } from 'next/navigation'
 
 // Next Imports
 import Link from 'next/link'
@@ -18,15 +21,18 @@ import Fade from '@mui/material/Fade'
 import Paper from '@mui/material/Paper'
 import IconButton from '@mui/material/IconButton'
 import Divider from '@mui/material/Divider'
+import { toast } from 'react-toastify'
 
 // Third-party Imports
 import classnames from 'classnames'
 
 // Type Imports
+
 import type { OptionsMenuType, OptionType, OptionMenuItemType } from './types'
 
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
+import { resetCourt } from '@/app/server/actions'
 
 const IconButtonWrapper = (props: Pick<OptionsMenuType, 'tooltipProps'> & { children: ReactElement }) => {
   // Props
@@ -72,6 +78,20 @@ const OptionMenu = (props: OptionsMenuType) => {
     setOpen(false)
   }
 
+  const router = useRouter()
+
+  const reset = async (id: string | undefined) => {
+    if (id === undefined) return
+    const estado = await resetCourt(id)
+
+    if (estado) {
+      toast.success('Court restarted successfully')
+      router.refresh()
+    } else {
+      toast.error('Something went wrong')
+    }
+  }
+
   return (
     <>
       <IconButtonWrapper tooltipProps={tooltipProps}>
@@ -107,6 +127,17 @@ const OptionMenu = (props: OptionsMenuType) => {
                       )
                     } else if ('divider' in option) {
                       return option.divider && <Divider key={index} {...option.dividerProps} />
+                    } else if (option.reset != 'undefined') {
+                      console.log(option)
+
+                      return (
+                        <MenuItem key={index} onClick={() => reset(option.reset)}>
+                          <MenuItemWrapper option={option}>
+                            {(typeof option.icon === 'string' ? <i className={option.icon} /> : option.icon) || null}
+                            {option.text}
+                          </MenuItemWrapper>
+                        </MenuItem>
+                      )
                     } else {
                       return (
                         <MenuItem

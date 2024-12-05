@@ -2,12 +2,13 @@
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
-import Chip from '@mui/material/Chip'
 import Divider from '@mui/material/Divider'
 import Button from '@mui/material/Button'
 import type { ButtonProps } from '@mui/material/Button'
 
 // Type Imports
+import type { Prisma } from '@prisma/client'
+
 import type { ThemeColor } from '@core/types'
 
 // Component Imports
@@ -15,23 +16,35 @@ import EditUserInfo from '@components/dialogs/edit-user-info'
 import ConfirmationDialog from '@components/dialogs/confirmation-dialog'
 import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementClick'
 import CustomAvatar from '@core/components/mui/Avatar'
+import { getUserById } from '@/app/server/actions'
+import type { UsersType } from '@/types/apps/userTypes'
 
-// Vars
-const userData = {
-  firstName: 'Seth',
-  lastName: 'Hallam',
-  userName: '@shallamb',
-  billingEmail: 'shallamb@gmail.com',
-  status: 'active',
-  role: 'Subscriber',
-  taxId: 'Tax-8894',
-  contact: '+1 (234) 464-0600',
-  language: ['English'],
-  country: 'France',
-  useAsBillingAddress: true
-}
+const UserDetails = async ({ id }: { id: string }) => {
+  type UserWithProfile = Prisma.PromiseReturnType<typeof getUserById>
+  let users: UserWithProfile = []
+  const usersData: UsersType[] = []
 
-const UserDetails = () => {
+  users = await getUserById(id)
+
+  if (users.length > 0) {
+    for (const user of users) {
+      usersData?.push({
+        id: id,
+        login: user.login,
+        vat: user.profile[0].vat,
+        role: 'user',
+        email: user.email,
+        status: 'active',
+        avatar: 'images/avatars/avatar_1.png',
+        company: user.profile[0].name,
+        country: user.profile[0].address,
+        contact: user.profile[0].email,
+        fullName: user.profile[0].name,
+        username: user.login
+      })
+    }
+  }
+
   const buttonProps = (children: string, color: ThemeColor, variant: ButtonProps['variant']): ButtonProps => ({
     children,
     color,
@@ -46,28 +59,7 @@ const UserDetails = () => {
             <div className='flex items-center justify-center flex-col gap-4'>
               <div className='flex flex-col items-center gap-4'>
                 <CustomAvatar alt='user-profile' src='/images/avatars/1.png' variant='rounded' size={120} />
-                <Typography variant='h5'>{`${userData.firstName} ${userData.lastName}`}</Typography>
-              </div>
-              <Chip label='Subscriber' color='error' size='small' variant='tonal' />
-            </div>
-            <div className='flex items-center justify-around flex-wrap gap-4'>
-              <div className='flex items-center gap-4'>
-                <CustomAvatar variant='rounded' color='primary' skin='light'>
-                  <i className='ri-check-line' />
-                </CustomAvatar>
-                <div>
-                  <Typography variant='h5'>1.23k</Typography>
-                  <Typography>Task Done</Typography>
-                </div>
-              </div>
-              <div className='flex items-center gap-4'>
-                <CustomAvatar variant='rounded' color='primary' skin='light'>
-                  <i className='ri-star-smile-line' />
-                </CustomAvatar>
-                <div>
-                  <Typography variant='h5'>568</Typography>
-                  <Typography>Project Done</Typography>
-                </div>
+                <Typography variant='h5'>{`${usersData[0].login} | ${usersData[0].fullName}`}</Typography>
               </div>
             </div>
           </div>
@@ -79,49 +71,31 @@ const UserDetails = () => {
                 <Typography className='font-medium' color='text.primary'>
                   Username:
                 </Typography>
-                <Typography>{userData.userName}</Typography>
+                <Typography>{usersData[0].fullName}</Typography>
               </div>
               <div className='flex items-center flex-wrap gap-x-1.5'>
                 <Typography className='font-medium' color='text.primary'>
                   Billing Email:
                 </Typography>
-                <Typography>{userData.billingEmail}</Typography>
-              </div>
-              <div className='flex items-center flex-wrap gap-x-1.5'>
-                <Typography className='font-medium' color='text.primary'>
-                  Status
-                </Typography>
-                <Typography color='text.primary'>{userData.status}</Typography>
-              </div>
-              <div className='flex items-center flex-wrap gap-x-1.5'>
-                <Typography className='font-medium' color='text.primary'>
-                  Role:
-                </Typography>
-                <Typography color='text.primary'>{userData.role}</Typography>
+                <Typography>{usersData[0].email}</Typography>
               </div>
               <div className='flex items-center flex-wrap gap-x-1.5'>
                 <Typography className='font-medium' color='text.primary'>
                   Tax ID:
                 </Typography>
-                <Typography color='text.primary'>{userData.taxId}</Typography>
+                <Typography color='text.primary'>{usersData[0].vat}</Typography>
               </div>
               <div className='flex items-center flex-wrap gap-x-1.5'>
                 <Typography className='font-medium' color='text.primary'>
                   Contact:
                 </Typography>
-                <Typography color='text.primary'>{userData.contact}</Typography>
-              </div>
-              <div className='flex items-center flex-wrap gap-x-1.5'>
-                <Typography className='font-medium' color='text.primary'>
-                  Language:
-                </Typography>
-                <Typography color='text.primary'>{userData.language}</Typography>
+                <Typography color='text.primary'>{usersData[0].email}</Typography>
               </div>
               <div className='flex items-center flex-wrap gap-x-1.5'>
                 <Typography className='font-medium' color='text.primary'>
                   Country:
                 </Typography>
-                <Typography color='text.primary'>{userData.country}</Typography>
+                <Typography color='text.primary'>{usersData[0].country}</Typography>
               </div>
             </div>
           </div>
@@ -130,7 +104,7 @@ const UserDetails = () => {
               element={Button}
               elementProps={buttonProps('Edit', 'primary', 'contained')}
               dialog={EditUserInfo}
-              dialogProps={{ data: userData }}
+              dialogProps={{ data: usersData[0] }}
             />
             <OpenDialogOnElementClick
               element={Button}

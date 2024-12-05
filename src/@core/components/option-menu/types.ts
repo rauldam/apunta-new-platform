@@ -25,6 +25,7 @@ export type OptionMenuItemType = {
   icon?: ReactNode
   linkProps?: BoxProps
   href?: LinkProps['href']
+  reset?: string
   menuItemProps?: MenuItemProps
   divider?: never
   dividerProps?: never

@@ -1,8 +1,9 @@
 // Type Imports
 export type Court = {
-  id: number
+  id: string
   title: string
   mac: string
+  is_available?: number
   plan: CourtsPlan
 }
 
@@ -13,4 +14,12 @@ export type CourtsPlan = {
 
 export type CourtsTypes = {
   courts: Court[]
+}
+
+export type CourtsTypeList = {
+  id: string
+  title: string
+  mac: string
+  is_available?: number
+  plan_name: string
 }

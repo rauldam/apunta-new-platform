@@ -11,7 +11,9 @@ import type { ButtonProps } from '@mui/material/Button'
 import UpgradePlan from '@components/dialogs/upgrade-plan'
 import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementClick'
 
-const UserPlan = ({id}: {id:string}) => {
+const UserPlan = async ({ id }: { id: string }) => {
+  console.log('ID', id)
+
   // Vars
   const buttonProps: ButtonProps = {
     variant: 'contained',
@@ -28,9 +30,7 @@ const UserPlan = ({id}: {id:string}) => {
               <Typography variant='h5' component='sup' className='self-start' color='primary'>
                 $
               </Typography>
-              <Typography component='span' variant='h1' color='primary'>
-                99
-              </Typography>
+              <Typography component='span' variant='h1' color='primary'></Typography>
               <Typography component='sub' className='self-end' color='text.primary'>
                 /month
               </Typography>

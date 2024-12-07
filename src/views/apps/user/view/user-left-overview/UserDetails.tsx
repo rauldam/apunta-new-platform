@@ -9,6 +9,8 @@ import type { ButtonProps } from '@mui/material/Button'
 // Type Imports
 import type { Prisma } from '@prisma/client'
 
+import { getServerSession } from 'next-auth'
+
 import type { ThemeColor } from '@core/types'
 
 // Component Imports
@@ -18,11 +20,15 @@ import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementCli
 import CustomAvatar from '@core/components/mui/Avatar'
 import { getUserById } from '@/app/server/actions'
 import type { UsersType } from '@/types/apps/userTypes'
+import { authOptions } from '@/libs/auth'
 
 const UserDetails = async ({ id }: { id: string }) => {
   type UserWithProfile = Prisma.PromiseReturnType<typeof getUserById>
   let users: UserWithProfile = []
   const usersData: UsersType[] = []
+
+  const session = await getServerSession(authOptions)
+  const rol = session && session?.user.role
 
   users = await getUserById(id)
 
@@ -99,20 +105,32 @@ const UserDetails = async ({ id }: { id: string }) => {
               </div>
             </div>
           </div>
-          <div className='flex gap-4 justify-center'>
-            <OpenDialogOnElementClick
-              element={Button}
-              elementProps={buttonProps('Edit', 'primary', 'contained')}
-              dialog={EditUserInfo}
-              dialogProps={{ data: usersData[0] }}
-            />
-            <OpenDialogOnElementClick
-              element={Button}
-              elementProps={buttonProps('Suspend', 'error', 'outlined')}
-              dialog={ConfirmationDialog}
-              dialogProps={{ type: 'suspend-account' }}
-            />
-          </div>
+          {rol === 'admin' && (
+            <div className='flex gap-4 justify-center'>
+              <OpenDialogOnElementClick
+                element={Button}
+                elementProps={buttonProps('Edit', 'primary', 'contained')}
+                dialog={EditUserInfo}
+                dialogProps={{ data: usersData[0] }}
+              />
+              <OpenDialogOnElementClick
+                element={Button}
+                elementProps={buttonProps('Suspend', 'error', 'outlined')}
+                dialog={ConfirmationDialog}
+                dialogProps={{ type: 'suspend-account' }}
+              />
+            </div>
+          )}
+          {rol != 'user' && (
+            <div className='flex gap-4 justify-center'>
+              <OpenDialogOnElementClick
+                element={Button}
+                elementProps={buttonProps('Edit', 'primary', 'contained')}
+                dialog={EditUserInfo}
+                dialogProps={{ data: usersData[0] }}
+              />
+            </div>
+          )}
         </CardContent>
       </Card>
     </>

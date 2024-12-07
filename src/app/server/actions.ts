@@ -176,3 +176,16 @@ export const resetCourt = async (id: string) => {
   if (court === null) return false
   if (court.is_available === 1) return true
 }
+
+export const getUserPlan = async (id: string) => {
+  const plan = await prisma.user.findMany({
+    where: {
+      id: StringToBuffer(id)
+    },
+    include: {
+      roles: true
+    }
+  })
+
+  return plan
+}
